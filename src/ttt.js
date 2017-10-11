@@ -32,6 +32,35 @@ var ttt = (function(ttt) {
         return ((board >> (square << 1)) & 3);
     }
 
+    function toArray(board) {
+        var a = [];
+        for (var i = 0; i < 9; ++i, board >>= 2) {
+            a[i] = (board & 3);
+        }
+        return a;
+    }
+
+    function toString(board) {
+        var s = '';
+        for (var i = 0; i < 9; ++i, board >>= 2) {
+            if (i > 0 && !(i % 3)) {
+                s += '/';
+            }
+            s += ((board & 3) === 0 ? '-' : ((board & 3) === X ? 'X' : 'O'));
+        }
+        return s;
+    }
+
+    function emptySquares(board) {
+        var empty = [];
+        for (var i = 0; i < 9; ++i, board >>= 2) {
+            if ((board & 3) === 0) {
+                empty.push(i);
+            }
+        }
+        return empty;
+    }
+
     function move(board, square, piece) {
         return (board | (piece << (square << 1)));
     }
