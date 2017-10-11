@@ -93,10 +93,28 @@ var ttt = (function(ttt) {
     // Game Functionality
 
     function Game(board, turn, history) {
+        board = (typeof board === 'undefined' ? newBoard() : board);
+        turn = turn || (emptySquares(board).length % 2 === 0 ? O : X);
+        history = history || [];
+
         this.board = board;
         this.turn = turn;
         this.history = history;
     }
+
+    Game.prototype.clone = function Game_clone() {
+        return new Game(
+            this.board, this.turn, this.history.map(function (h) { return h; })
+        );
+    };
+
+    Game.prototype.toString = function Game_toString() {
+        return "" + (this.turn === X ? "X" : "O") + "@" + toString(this.board);
+    };
+
+    Game.prototype.emptySquares = function Game_emptySquares() {
+        return emptySquares(this.board);
+    };
 
     Game.prototype.equals = function Game_equals(other) {
         return (this.board === other.board && this.turn === other.turn);
@@ -128,9 +146,11 @@ var ttt = (function(ttt) {
         ctx.moveTo(0.333, 0.05);
         ctx.lineTo(0.333, 0.95);
         ctx.moveTo(0.666, 0.05);
-        ctx.lineTo(0.666, 0.05);
-        ctx.moveTo(0.95, 0.333);
-        ctx.moveTo(0.95, 0.666);
+        ctx.lineTo(0.666, 0.95);
+        ctx.moveTo(0.05, 0.333);
+        ctx.lineTo(0.95, 0.333);
+        ctx.moveTo(0.05, 0.666);
+        ctx.lineTo(0.95, 0.666);
         ctx.stroke();
     }
 

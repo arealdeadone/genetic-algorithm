@@ -23,11 +23,11 @@ var Ai = (function (Ai) {
     Random.prototype.getMove = Ai_getMove;
 
     function sign(piece) {
-        return (piece === 0 ? 0 : (piece === Ttt.X ? 1 : -1));
+        return (piece === 0 ? 0 : (piece === ttt.X ? 1 : -1));
     }
 
     function countScoringMoves(board, scorer) {
-        var pieces = Ttt.toArray(board);
+        var pieces = ttt.toArray(board);
         var scoringMoves = 0;
 
         for (var i = 0; i < 3; ++i) {
@@ -86,10 +86,10 @@ var Ai = (function (Ai) {
     // We give a winning position a high score, then count the number of ways a
     // player could win at the current position.
     Smart.evaluate = function Smart_evaluate(board, winner) {
-        winner = (typeof winner === 'undefined' ? Ttt.winner(board) : winner);
+        winner = (typeof winner === 'undefined' ? ttt.winner(board) : winner);
 
         if (winner) {
-            return sign(winner === Ttt.TIE ? 0 : winner) * 100;
+            return sign(winner === ttt.TIE ? 0 : winner) * 100;
         }
 
         return countNearWins(board) * 10 + countPotentialWins(board);
@@ -118,8 +118,8 @@ var Ai = (function (Ai) {
     }
 
     function blocksOpponent(board, move, turn) {
-        var opponent = (turn === Ttt.X ? Ttt.O : Ttt.X);
-        return (countNearWinsForPlayer(Ttt.move(board, move, turn), opponent)
+        var opponent = (turn === ttt.X ? ttt.O : ttt.X);
+        return (countNearWinsForPlayer(ttt.move(board, move, turn), opponent)
             < countNearWinsForPlayer(board, opponent)
         );
     }
@@ -132,7 +132,7 @@ var Ai = (function (Ai) {
         if (moves.length > 1) {
             var win = false;
             moves = topScoring(moves, function (move) {
-                if (Ttt.winner(Ttt.move(board, move, turn)) === turn) {
+                if (ttt.winner(ttt.move(board, move, turn)) === turn) {
                     win = true;
                     return 1;
                 }
@@ -152,7 +152,7 @@ var Ai = (function (Ai) {
         if (moves.length > 1) {
             moves = topScoring(moves, function (move) {
                 return (sign(turn)
-                    * Smart.evaluate(Ttt.move(board, move, turn))
+                    * Smart.evaluate(ttt.move(board, move, turn))
                 );
             }).moves;
         }
@@ -170,16 +170,16 @@ var Ai = (function (Ai) {
     // to instruct us as to which move to make, if we're at the top level we
     // return the list of best moves instead of their score.
     Smart.prototype.negamax = function Smart_negamax(board, turn, depth) {
-        var winner = Ttt.winner(board);
+        var winner = ttt.winner(board);
         if (depth === this.maxDepth || winner) {
             return sign(turn) * Smart.evaluate(board, winner);
         }
 
         var that = this;
-        var topScore = topScoring(Ttt.emptySquares(board), function (move) {
+        var topScore = topScoring(ttt.emptySquares(board), function (move) {
             return -that.negamax(
-                Ttt.move(board, move, turn),
-                (turn === Ttt.X ? Ttt.O : Ttt.X),
+                ttt.move(board, move, turn),
+                (turn === ttt.X ? ttt.O : ttt.X),
                 depth + 1
             );
         });
@@ -193,17 +193,17 @@ var Ai = (function (Ai) {
     // A small lookup table for the second move, so we don't have to go through
     // the whole algorithm just to pick the corners or the middle.
     function getSecondMoves(board) {
-        if (Ttt.getPiece(board, 4)) {
+        if (ttt.getPiece(board, 4)) {
             return [0, 2, 6, 8];
         }
         return [4];
     }
 
     Smart.prototype.getMoves = function Smart_getMoves(game) {
-        if (Ttt.isEmpty(game.board)) {
+        if (ttt.isEmpty(game.board)) {
             return [4];
         }
-        if (Ttt.emptySquares(game.board).length === 8) {
+        if (ttt.emptySquares(game.board).length === 8) {
             return getSecondMoves(game.board);
         }
 
@@ -223,7 +223,7 @@ var Ai = (function (Ai) {
     function getInputs(board, turn) {
         var inputs = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         for (var i = 0; i < 9; ++i) {
-            var piece = Ttt.getPiece(board, i);
+            var piece = ttt.getPiece(board, i);
             if (piece === turn) {
                 inputs[i * 2] = 1;
             }
@@ -237,7 +237,7 @@ var Ai = (function (Ai) {
     Neural.prototype.getMoves = function Neural_getMoves(game) {
         var that = this;
         return topScoring(game.emptySquares(), function (move) {
-            var board = Ttt.move(game.board, move, game.turn);
+            var board = ttt.move(game.board, move, game.turn);
 
             that.net.reset();
             var outputs = that.net.run(getInputs(board, game.turn));

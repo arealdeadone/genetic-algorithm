@@ -14,7 +14,7 @@ var Genetic = (function (Genetic) {
     function generateTestBoards(boards, visited, game) {
         boards = boards || [[], [], [], [], [], [], [], []];
         visited = visited || {};
-        game = game || new Ttt.Game();
+        game = game || new ttt.Game();
 
         var emptySquares = game.emptySquares();
 
@@ -65,7 +65,7 @@ var Genetic = (function (Genetic) {
     };
 
     Individual.prototype.evaluateOne = function Individual_evaluateOne(b) {
-        var game = new Ttt.Game(b.board);
+        var game = new ttt.Game(b.board);
         if (!b.rightMoves) {
             b.rightMoves = new Ai.Smart().getMoves(game);
         }

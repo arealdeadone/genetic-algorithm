@@ -10,8 +10,8 @@ var paused = false;
 
 $(function () {
     ais = {};
-    ais[Ttt.X] = null;
-    ais[Ttt.O] = null;
+    ais[ttt.X] = null;
+    ais[ttt.O] = null;
 
     var $board = $('#board');
     var $status = $('#status');
@@ -30,7 +30,7 @@ $(function () {
     restart();
 
     function restart() {
-        game = new Ttt.Game();
+        game = new ttt.Game();
         update();
     }
 
@@ -40,9 +40,9 @@ $(function () {
         redraw();
 
         switch (game.winner()) {
-            case Ttt.X: $status.text($status.data('winner-x')); break;
-            case Ttt.O: $status.text($status.data('winner-o')); break;
-            case Ttt.TIE: $status.text($status.data('tie')); break;
+            case ttt.X: $status.text($status.data('winner-x')); break;
+            case ttt.O: $status.text($status.data('winner-o')); break;
+            case ttt.TIE: $status.text($status.data('tie')); break;
             default:
                 if (ais[game.turn] && paused) {
                     $status.text($status.data('paused'));
@@ -127,12 +127,12 @@ $(function () {
 
     function setAiFromSelect(turn) {
         var ai = null;
-        switch ((turn === Ttt.X ? $xControl : $oControl).val()) {
+        switch ((turn === ttt.X ? $xControl : $oControl).val()) {
             case 'ai-random': ai = new Ai.Random(); break;
             case 'ai-easy': ai = new Ai.Smart(1); break;
             case 'ai-smart': ai = new Ai.Smart(); break;
             case 'ai-neural':
-                var importBox = (turn === Ttt.X ? $xAiNeuralImport : $oAiNeuralImport);
+                var importBox = (turn === ttt.X ? $xAiNeuralImport : $oAiNeuralImport);
                 if (importBox.val().length > 0) {
                     try {
                         var obj = $.parseJSON(importBox.val());
@@ -175,19 +175,19 @@ $(function () {
     });
 
     $xControl.change(function (event) {
-        setAiFromSelect(Ttt.X);
+        setAiFromSelect(ttt.X);
     });
 
     $xAiNeuralImport.change(function (event) {
-        setAiFromSelect(Ttt.X);
+        setAiFromSelect(ttt.X);
     });
 
     $oControl.change(function (event) {
-        setAiFromSelect(Ttt.O);
+        setAiFromSelect(ttt.O);
     });
 
     $oAiNeuralImport.change(function (event) {
-        setAiFromSelect(Ttt.O);
+        setAiFromSelect(ttt.O);
     });
 
     $pauseButton.click(function (event) {
