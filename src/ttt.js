@@ -20,7 +20,7 @@ var ttt = (function(ttt) {
    */
 
   //helper classes
-    function newBoeard() {
+    function newBoard() {
         return 0;
     }
 

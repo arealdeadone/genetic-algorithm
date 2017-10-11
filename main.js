@@ -37,25 +37,25 @@ $(function () {
     var demos = [
         {
             ctx: $('#x-random-demo-board')[0].getContext('2d'),
-            player: Ttt.X,
+            player: ttt.X,
             opponent: new Ai.Random(),
             game: null
         },
         {
             ctx: $('#x-smart-demo-board')[0].getContext('2d'),
-            player: Ttt.X,
+            player: ttt.X,
             opponent: new Ai.Smart(),
             game: null
         },
         {
             ctx: $('#o-random-demo-board')[0].getContext('2d'),
-            player: Ttt.O,
+            player: ttt.O,
             opponent: new Ai.Random(),
             game: null
         },
         {
             ctx: $('#o-smart-demo-board')[0].getContext('2d'),
-            player: Ttt.O,
+            player: ttt.O,
             opponent: new Ai.Smart(),
             game: null
         }
@@ -281,7 +281,7 @@ $(function () {
         }
 
         demos.forEach(function (d) {
-            d.game = new Ttt.Game();
+            d.game = new ttt.Game();
         });
         drawDemos();
     }
@@ -289,7 +289,7 @@ $(function () {
     function updateDemos() {
         demos.forEach(function (d) {
             if (d.game.winner()) {
-                d.game = new Ttt.Game();
+                d.game = new ttt.Game();
                 return;
             }
 
@@ -304,7 +304,7 @@ $(function () {
 
     function drawDemos() {
         demos.forEach(function (d) {
-            (d.game ? d.game : new Ttt.Game()).draw(d.ctx);
+            (d.game ? d.game : new ttt.Game()).draw(d.ctx);
         });
     }
 
